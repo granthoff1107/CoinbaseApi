@@ -1,0 +1,22 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div class="row">
+    <div class="col-md-12">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Login" asp-controller="Account" class="btn btn-default">Coinbase Login</a>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="@Model.CoinbaseAvatar" alt="" class="img-thumbnail" />
+                </div>
+                <a asp-action="Logout" asp-controller="Account" class="btn btn-default">Logout</a>
+            </div>
+        }
+    </div>
+</div>
