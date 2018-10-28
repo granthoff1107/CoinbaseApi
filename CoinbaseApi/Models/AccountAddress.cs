@@ -5,15 +5,14 @@ using System.Text;
 
 namespace CoinbaseApi.Models
 {
-    public class Account
+    public class AccountAddress
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public bool Primary { get; set; }
-        public AccountType Type { get; set; }
-        public Balance Balance { get; set; }
+        public string Address { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
     }
 }
+
+

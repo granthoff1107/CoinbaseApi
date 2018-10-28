@@ -92,7 +92,7 @@ namespace OAuthCoinbase
 
                         var user = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-                        context.RunClaimActions(user);
+                        context.RunClaimActions(JObject.FromObject(user));
                     }
                 };
             });

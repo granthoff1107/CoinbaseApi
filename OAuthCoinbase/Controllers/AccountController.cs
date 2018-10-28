@@ -22,9 +22,9 @@ namespace OAuthCoinbase.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            this.SignOut();
+            await HttpContext.SignOutAsync();
             return Redirect(Url.Content("~/"));
         }
 

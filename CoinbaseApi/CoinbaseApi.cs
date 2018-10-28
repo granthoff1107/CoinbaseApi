@@ -1,4 +1,5 @@
-﻿using CoinbaseApi.Models;
+﻿using CoinbaseApi.Exceptions;
+using CoinbaseApi.Models;
 using CoinbaseApi.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -67,14 +68,30 @@ namespace OAuthCoinbase
             return response.Data?.Data;
         }
 
+        public List<AccountAddress> GetAddresses(Account account) => this.GetAddresses(account.Id);
+
+        public List<AccountAddress> GetAddresses(string Id)
+        {
+            var request = new RestRequest($"accounts/{Id}/addresses", Method.GET, DataFormat.Json);
+            var response = this._client.Execute<CoinbaseResponseWrapper<List<AccountAddress>>>(request);
+
+            this.HandleKnownExceptions(response);
+            return response.Data?.Data;
+        }
+
+
         protected void HandleKnownExceptions(IRestResponse response)
         {
             if(response.StatusCode == HttpStatusCode.Unauthorized)
             {
+                //TODO: Parse Error From Response
+                throw new TokenExpiredException();
                 //{ "errors":[{"id":"expired_token","message":"The access token expired"}]}
             }
             else if(response.StatusCode == HttpStatusCode.Forbidden)
             {
+                //TODO: Parse Error From Response
+                throw new InvalidScopeException();
                 //{ "errors":[{"id":"invalid_scope","message":"Invalid scope","url":"https://developers.coinbase.com/api#permissions-scopes"}]}
             }
 
