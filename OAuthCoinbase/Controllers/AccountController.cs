@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoinbaseApi.Exceptions;
+using CoinbaseApi.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,5 +30,20 @@ namespace OAuthCoinbase.Controllers
             return Redirect(Url.Content("~/"));
         }
 
+        [HttpPost]
+        public async Task<TransactionReciept> SendMoney(string accountId, string toAddress, Currency currency, 
+                                    double amount = .001, string twoFactor = "", string idem = "")
+        {
+            try
+            {
+                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var coinbaseApi = new CoinbaseApi(accessToken);
+                return coinbaseApi.SendCurrency(accountId, amount, toAddress, currency, twoFactor, idem);
+            }
+            catch(Transaction2FaRequiredException)
+            {
+                return null;
+            }
+        }
     }
 }

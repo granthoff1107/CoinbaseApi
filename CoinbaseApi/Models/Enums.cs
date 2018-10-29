@@ -19,4 +19,26 @@ namespace CoinbaseApi.Models
     {
         Wallet,
     }
+
+    public enum NetworkStatus
+    {
+        Confirmed,
+    }
+
+    public enum TransactionStatus
+    {
+        Pending,
+        Complete,
+        Failed,
+        Expired,
+        Canceled
+    }
+
+    public enum TransactionType
+    {
+        Send,
+        Transfer,
+        Request
+    }
+
 }

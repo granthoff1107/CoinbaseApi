@@ -3,6 +3,26 @@
 @{
     ViewData["Title"] = "Home page";
 }
+
+@section Scripts
+{
+    <script>
+
+        $('.sendMoney').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/Account/SendMoney',
+                type: 'POST',
+                data: $(this).parent().find("input").serialize(),
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+
+    </script>
+}
+
 <div class="row">
     <div class="col-md-12">
         @if (!User.Identity.IsAuthenticated)
@@ -22,9 +42,22 @@
                     <ul>
                         @foreach (var account in Model.AccountDetails)
                         {
-                            <li>Address: @account.Addresses.FirstOrDefault()?.Address
-                                Has: @account.Account.Balance.Amount @account.Account.Balance.Currency</li>
-                        }
+                            <li>
+                                Address: @account.Addresses.FirstOrDefault()?.Address
+                                Has: @account.Account.Balance.Amount @account.Account.Balance.Currency
+                            </li>
+                            <li>
+                                <input type="hidden" name="accountId" value="@account.Account.Id" />
+                                <input type="hidden" name="currency" value="@account.Account.Balance.Currency" />
+                                <label>To:</label>
+                                <input name="toAddress" type="text" />
+                                <label>Two Factor:</label>
+                                <input name="twoFactor" type="text" />
+                                <label>idem</label>
+                                <input name="idem" type="text" />
+                                <button class="sendMoney"> Send Money</button>
+                            </li>
+                          }
                     </ul>
                 </div>
             </div>

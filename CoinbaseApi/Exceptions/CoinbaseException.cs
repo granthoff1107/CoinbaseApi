@@ -15,7 +15,12 @@ namespace CoinbaseApi.Exceptions
 
     public class InvalidScopeException : CoinbaseException
     {
-        public override string Message => "Fobidden, Check your scopes to make sure you have Access Priviledges";
+        public override string Message => "Forbidden, Check your scopes to make sure you have Access Priviledges";
+    }
+
+    public class Transaction2FaRequiredException : CoinbaseException
+    {
+        public override string Message => "Two factor authentication is required, replay the request with the 2FA Token";
     }
 
 }

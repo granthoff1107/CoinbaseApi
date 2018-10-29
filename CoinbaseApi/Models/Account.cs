@@ -12,7 +12,6 @@ namespace CoinbaseApi.Models
         public bool Primary { get; set; }
         public AccountType Type { get; set; }
         public Balance Balance { get; set; }
-
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
     }
