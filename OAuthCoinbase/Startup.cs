@@ -76,9 +76,9 @@ namespace OAuthCoinbase
                 options.SaveTokens = true;
 
 
-                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "data.id");
-                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "data.name");
-                options.ClaimActions.MapJsonKey("urn:coinbase:avatar", "data.avatar_url");
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                options.ClaimActions.MapJsonKey("urn:coinbase:avatar", "avatar_url");
 
                 options.Events = new OAuthEvents
                 {
@@ -91,7 +91,9 @@ namespace OAuthCoinbase
                         var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
                         response.EnsureSuccessStatusCode();
 
-                        var user = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        var userData = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                        var user = userData["data"];
 
                         context.RunClaimActions(JObject.FromObject(user));
                     }

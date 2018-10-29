@@ -20,7 +20,7 @@ namespace OAuthCoinbase.Pages
 
         public string CoinbaseName { get; set; }
 
-        public List<AccountDetail> AccountDetails { get; set; }
+        public List<AccountDetail> AccountDetails { get; set; } = new List<AccountDetail>();
 
         public async Task OnGetAsync()
         {
@@ -44,7 +44,7 @@ namespace OAuthCoinbase.Pages
                 }
                 catch(TokenExpiredException)
                 {
-                    RedirectToAction("Logout", "Account");
+                    await HttpContext.SignOutAsync();
                 }
             }
         }
