@@ -37,13 +37,15 @@ namespace OAuthCoinbase
 
         #region Coinbase Api Methods
 
-        public TransactionReciept SendCurrency(string accountId, double amount, string toAddress, Currency currency, string twoFactor ="", string idem = "")
+        public TransactionReciept SendCurrency(string accountId, double amount, string toAddress, 
+                Currency currency, string description = "", string twoFactor ="", string idem = "")
         {
             var request = new RestRequest($"accounts/{accountId}/transactions", Method.POST, DataFormat.Json);
             request.AddParameter("type", "send");
             request.AddParameter("to", toAddress);
             request.AddParameter("amount", amount);
             request.AddParameter("currency", currency.ToString());
+            request.AddParameter("description", description);
 
             if(false == string.IsNullOrWhiteSpace(idem))
             {

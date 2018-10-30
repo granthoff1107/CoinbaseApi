@@ -32,13 +32,13 @@ namespace OAuthCoinbase.Controllers
 
         [HttpPost]
         public async Task<TransactionReciept> SendMoney(string accountId, string toAddress, Currency currency, 
-                                    double amount = .001, string twoFactor = "", string idem = "")
+                                    double amount = .001, string twoFactor = "", string description = "", string idem = "")
         {
             try
             {
                 var accessToken = await HttpContext.GetTokenAsync("access_token");
                 var coinbaseApi = new CoinbaseApi(accessToken);
-                return coinbaseApi.SendCurrency(accountId, amount, toAddress, currency, twoFactor, idem);
+                return coinbaseApi.SendCurrency(accountId, amount, toAddress, currency, description,  twoFactor, idem);
             }
             catch(Transaction2FaRequiredException)
             {

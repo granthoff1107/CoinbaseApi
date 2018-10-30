@@ -19,5 +19,6 @@ namespace CoinbaseApi.Models
         [JsonProperty("instant_exchange")]
         public bool InstantExchange { get; set; }
         public ToAddress To { get; set; }
+        public string Description { get; set; }
     }
 }
