@@ -52,7 +52,7 @@ namespace OAuthCoinbase
 
             if(false == string.IsNullOrWhiteSpace(twoFactor))
             {
-                request.AddParameter("CB-2FA-TOKEN", twoFactor);
+                request.AddHeader("CB-2FA-TOKEN", twoFactor);
             }
 
             var requestString = this.LogRequest(request);
@@ -140,6 +140,10 @@ namespace OAuthCoinbase
                 //TODO: Parse Error From Response
                 throw new InvalidScopeException();
                 //{ "errors":[{"id":"invalid_scope","message":"Invalid scope","url":"https://developers.coinbase.com/api#permissions-scopes"}]}
+            }
+            else if(response.StatusCode == HttpStatusCode.PaymentRequired)
+            {
+                throw new Transaction2FaRequiredException();
             }
 
         }

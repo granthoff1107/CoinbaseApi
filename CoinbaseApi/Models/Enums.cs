@@ -12,6 +12,7 @@ namespace CoinbaseApi.Models
         ETH,
         LTC,
         USDC,
+        USD,
         ZRX
     }
 
