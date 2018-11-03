@@ -19,7 +19,7 @@ namespace OAuthCoinbase.Pages
         public string CoinbaseAvatar { get; set; }
 
         public string CoinbaseName { get; set; }
-
+         
         public List<AccountDetail> AccountDetails { get; set; } = new List<AccountDetail>();
 
         public async Task OnGetAsync()
