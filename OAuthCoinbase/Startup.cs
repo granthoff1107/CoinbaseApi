@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Coinbase.Authentication.Coinbase;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -22,8 +23,6 @@ namespace OAuthCoinbase
 {
     public class Startup
     {
-        public const string COINBASE_AUTH_ID = "coinbase";
-
         public static readonly List<string> COINBASE_SCOPES = new List<string> {
             "wallet:accounts:read",
             "wallet:addresses:read",
@@ -58,46 +57,20 @@ namespace OAuthCoinbase
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = COINBASE_AUTH_ID;
+                options.DefaultChallengeScheme = CoinbaseDefaults.AuthenticationScheme;
             })
             .AddCookie()
-            .AddOAuth(COINBASE_AUTH_ID, options =>
+            .AddCoinbase(options =>
             {
+                options.SendLimitAmount = 1;
+                options.SendLimitCurrency = "USD";
+                options.SendLimitPeriod = SendLimitPeriod.day;
                 options.ClientId = Configuration["Coinbase:ClientId"];
                 options.ClientSecret = Configuration["Coinbase:ClientSecret"];
-                options.CallbackPath = new PathString("/signin-coinbase");
-
-                options.AuthorizationEndpoint = "https://www.coinbase.com/oauth/authorize?meta[send_limit_amount]=1";
-                options.TokenEndpoint = "https://api.coinbase.com/oauth/token";
-                options.UserInformationEndpoint = "https://api.coinbase.com/v2/user";
-
                 COINBASE_SCOPES.ForEach(scope => options.Scope.Add(scope));
-
                 options.SaveTokens = true;
-
-
-                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
                 options.ClaimActions.MapJsonKey("urn:coinbase:avatar", "avatar_url");
 
-                options.Events = new OAuthEvents
-                {
-                    OnCreatingTicket = async context =>
-                    {
-                        var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
-                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-                        request.Headers.Add("CB-VERSION", DateTime.Now.ToShortDateString());
-                        var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
-                        response.EnsureSuccessStatusCode();
-
-                        var userData = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-                        var user = userData["data"];
-
-                        context.RunClaimActions(JObject.FromObject(user));
-                    }
-                };
             });
 
             services.Configure<CookiePolicyOptions>(options =>

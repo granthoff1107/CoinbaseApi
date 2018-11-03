@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthCoinbase", "OAuthCoinb
 		{A73ED894-9FDF-4197-B30A-E6A6DF3D810D} = {A73ED894-9FDF-4197-B30A-E6A6DF3D810D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinbaseApi", "CoinbaseApi\CoinbaseApi.csproj", "{A73ED894-9FDF-4197-B30A-E6A6DF3D810D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinbaseApi", "CoinbaseApi\CoinbaseApi.csproj", "{A73ED894-9FDF-4197-B30A-E6A6DF3D810D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

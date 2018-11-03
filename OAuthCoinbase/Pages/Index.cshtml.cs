@@ -43,7 +43,7 @@ namespace OAuthCoinbase.Pages
 
                 }
                 catch(TokenExpiredException)
-                {
+                { 
                     await HttpContext.SignOutAsync();
                 }
             }
